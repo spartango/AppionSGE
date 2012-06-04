@@ -92,7 +92,7 @@ class SGEHost(processingHost.ProcessingHost):
     #  5149 0.55500 test.sh    agupta       r     06/04/2012 13:04:52 default@baltar.mcb.harvard.edu     1      
     
     def checkJobStatus(self, procHostJobId):
-        statusCommand = self.getStatusCommand() + " -j " +  str(procHostJobId)
+        statusCommand = self.getStatusCommand()
         
         try:
             process = subprocess.Popen(statusCommand, 
