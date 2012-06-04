@@ -90,7 +90,7 @@ class SGEHost(processingHost.ProcessingHost):
     #     job-ID  prior   name       user         state submit/start at     queue                          slots ja-task-ID 
     # ----------------------------------------------------------------------------------------------------------------- 
     #  5149 0.55500 test.sh    agupta       r     06/04/2012 13:04:52 default@baltar.mcb.harvard.edu     1      
-    
+
     def checkJobStatus(self, procHostJobId):
         statusCommand = self.getStatusCommand()
         
@@ -106,23 +106,28 @@ class SGEHost(processingHost.ProcessingHost):
                 returnStatus = 'U'
             else:
                 rstring = process.communicate()[0]
-                try:
-                    # Grab the 3rd line (with this job status) and the 5th column
-                    status =  rstring.split('\n')[2].split()[4]
-                    #translate SGE status codes to appion codes
-                    if status == 'c' or status == 'e':
-                        #Job completed of is exiting
-                        returnStatus = 'D'
-                      
-                    elif status == 'r':
-                        #Job is running
-                        returnStatus = 'R'
-                    elif status == 'qw':
-                        returnStatus = 'Q'
-                    else:
-                        #Interpret everything else as queued
-                        returnStatus = 'Q'
-                except IndexError:
+
+                # Get each job status
+                statusLines =  rstring.split('\n')
+
+                # Find the job with the correct id
+                status = None
+                for job in statusLines:
+                    parts = job.split()
+                    if parts[0] == str(procHostJobId):
+                        status = parts[4]
+                        break
+
+                #translate SGE status codes to appion codes
+                if status == 'c' or status == 'e':
+                    #Job completed of is exiting
+                    returnStatus = 'D'
+                elif status == 'r':
+                    #Job is running
+                    returnStatus = 'R'
+                elif status == 'qw':
+                    returnStatus = 'Q'
+                else:
                     # HACK
                     # The job line isn't there. We'll assume this is because it's done
                     returnStatus = 'D'
