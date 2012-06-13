@@ -41,8 +41,8 @@ class SGEHost(processingHost.ProcessingHost):
         # if currentJob.getCpuTime():
         #     header += self.scriptPrefix +" -l cput=" + str(currentJob.getCpuTime()) + ":00:00\n"
             
-        #if currentJob.getMem():
-        #    header += self.scriptPrefix +" -l mem_free=" + str(currentJob.getMem()) + 'gb\n'
+        if currentJob.getMem():
+            header += self.scriptPrefix +" -l mem_free=" + str(currentJob.getMem()) + 'G\n'
         
         # Specify the current directory as the working directory
         header += self.scriptPrefix + " -cwd \n"
