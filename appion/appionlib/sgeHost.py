@@ -26,7 +26,7 @@ class SGEHost(processingHost.ProcessingHost):
             raise UnboundLocalError ("Current Job not set")
         #Every Shell Script starts by indicating shell type
         header = "#!" + self.getShell() + "\n"
-        header += " -S " + self.getShell() + "\n"
+        #header += " -S " + self.getShell() + "\n"
         #add job attribute headers
         # TODO
         # if currentJob.getWalltime():
